@@ -15,7 +15,7 @@ Node and/or Edge helper functions to create JWK's AND create and verify JWT's wi
 ## 💚 Example: Create public and private jwk
 The public & private jwk will log in the terminal, then we put them in our `.env` file
 ```ts
-import { createJWKs } from '@sensethenlove/jwt'
+import { createJWKs } from '@feelinglovelynow/jwt'
 
 createJWKs()
 ```
@@ -25,7 +25,7 @@ createJWKs()
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
-import { createJWT } from '@sensethenlove/jwt'
+import { createJWT } from '@feelinglovelynow/jwt'
 import { JWK_PRIVATE } from '$env/static/private'
 
 const jwtPayload = { userId: 1 }
@@ -38,7 +38,7 @@ const jwt = await createJWT(jwtPayload, expiresInAsSeconds, JWK_PRIVATE, Buffer)
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
-import { decodeJWT } from '@sensethenlove/jwt'
+import { decodeJWT } from '@feelinglovelynow/jwt'
 
 const decoded = decodeJWT(jwt, Buffer)
 ```
@@ -48,7 +48,7 @@ const decoded = decodeJWT(jwt, Buffer)
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
-import { verifyJWT } from '@sensethenlove/jwt'
+import { verifyJWT } from '@feelinglovelynow/jwt'
 import { JWK_PUBLIC } from '$env/static/private'
 
 const payload = await verifyJWT(jwt, JWK_PUBLIC, Buffer)
