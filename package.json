@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "bash ./build.sh",
-    "up": "pnpm publish --access public ."
+    "cloud": "pnpm publish --access public ."
   },
   "devDependencies": {
     "esbuild": "^0.19.7",
