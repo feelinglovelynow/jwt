@@ -1,13 +1,26 @@
-{
-  "extends": "./.svelte-kit/tsconfig.json",
+{ // https://www.typescriptlang.org/tsconfig
+  "files": [
+    "src/createJWKs.js",
+    "src/createJWT.js",
+    "src/decodeJWT.js",
+    "src/getAlgorithmOptions.js",
+    "src/getHeaderAndPayloadAsStrings.js",
+    "src/getNowInSeconds.js",
+    "src/index.js",
+    "src/toBase64Url.js",
+    "src/verifyJWT.js"
+  ],
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true
+    "allowJs": true, // Tells TypeScript to read JS files, as normally they are ignored as source files
+    "checkJs": true, // Enable errors in JavaScript files
+    "esModuleInterop": true, // https://www.typescriptlang.org/tsconfig#esModuleInterop
+    "forceConsistentCasingInFileNames": true, // TypeScript will issue an error if a program tries to include a file by a casing different from the casing on disk.
+    "sourceMap": true, // Enables the generation of sourcemap files. These files allow debuggers and other tools to display the original TypeScript source code when actually working with the emitted JavaScript files.
+    "declaration": true, // Generate d.ts files
+    "strict": true, // The strict flag enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
+    "outDir": "tsc", // Types should go into this directory. Removing this would place the .d.ts files next to the .js files
+    "declarationMap": true, // go to js file when using IDE functions like "Go to Definition" in VSCode
+    "module": "ES2015", // Sets the module system for the program.
+    "target": "ES2015",  // The target setting changes which JS features are downleveled and which are left intact.
   }
 }

@@ -1,12 +1,17 @@
 {
   "name": "@feelinglovelynow/jwt",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "Node and/or Edge helper functions to create JWK's, create JWT's, decode JWT's and verify JWT's with the subtle crypto api's ECDSA: SHA-512 algorithm",
   "license": "MIT",
-  "author": "https://github.com/feelinglovelynow?tab=repositories",
   "type": "module",
-  "svelte": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "description": "Node and/or Edge helper functions to create JWK's AND create and verify JWT's with the subtle crypto api (ECDSA)",
+  "types": "./dist/index.ts",
+  "exports": "./dist/index.js",
+  "author": "https://github.com/feelinglovelynow?tab=repositories",
+  "files": [
+    "dist",
+    "tsc",
+    "src"
+  ],
   "keywords": [
     "jwt",
     "jwk",
@@ -20,47 +25,14 @@
     "cloudflare",
     "cloudflare workers",
     "browser",
-    "edge"
+    "edge",
+    "serverless"
   ],
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build && npm run package",
-    "preview": "vite preview",
-    "package": "svelte-kit sync && svelte-package && publint",
-    "prepublishOnly": "npm run package",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "svelte": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist",
-    "!dist/**/*.test.*",
-    "!dist/**/*.spec.*"
-  ],
-  "peerDependencies": {
-    "svelte": "^4.0.0"
+    "build": "bash ./build.sh"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^2.1.0",
-    "@sveltejs/kit": "^1.27.2",
-    "@sveltejs/package": "^2.2.2",
-    "publint": "^0.2.5",
-    "svelte": "^4.2.2",
-    "svelte-check": "^3.5.2",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/feelinglovelynow/jwt.git"
-  },
-  "bugs": {
-    "url": "https://github.com/feelinglovelynow/jwt/issues"
+    "esbuild": "^0.19.7",
+    "typescript": "^5.3.2"
   }
 }

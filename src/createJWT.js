@@ -1,9 +1,16 @@
-import toBase64Url from './toBase64Url'
-import getAlgorithmOptions from './getAlgorithmOptions'
-import getHeaderAndPayloadAsStrings from './getHeaderAndPayloadAsStrings'
+import { toBase64Url } from './toBase64Url.js'
+import { getAlgorithmOptions } from './getAlgorithmOptions.js'
+import { getHeaderAndPayloadAsStrings } from './getHeaderAndPayloadAsStrings.js'
 
-
-export default async function createJWT (jwtPayload: Object, expiresInAsSeconds: number, privateJWK: string, Buffer: any): Promise<string> {
+/**
+ * Create JWT token
+ * @param { Object } jwtPayload 
+ * @param { number } expiresInAsSeconds 
+ * @param { string } privateJWK 
+ * @param { any } Buffer 
+ * @returns { Promise<string> }
+*/
+export async function createJWT (jwtPayload, expiresInAsSeconds, privateJWK, Buffer) {
   const privateKey = await crypto.subtle.importKey('jwk', JSON.parse(privateJWK), getAlgorithmOptions('import'), true, ['sign'])
   const { header, payload, united } = getHeaderAndPayloadAsStrings(jwtPayload, expiresInAsSeconds)
   const unitedAsArrayBuffer = new TextEncoder().encode(united)
@@ -13,5 +20,5 @@ export default async function createJWT (jwtPayload: Object, expiresInAsSeconds:
   const headerAsBase64 = toBase64Url(header, Buffer)
   const payloadAsBase64 = toBase64Url(payload, Buffer)
 
-  return `${headerAsBase64}.${payloadAsBase64}.${signatureAsBase64}`
+  return `${ headerAsBase64 }.${ payloadAsBase64 }.${ signatureAsBase64 }`
 }
