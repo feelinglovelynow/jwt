@@ -1,6 +1,6 @@
 {
   "name": "@feelinglovelynow/jwt",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Node and/or Edge helper functions to create JWK's, create JWT's, decode JWT's and verify JWT's with the subtle crypto api's ECDSA: SHA-512 algorithm",
   "license": "MIT",
   "type": "module",
@@ -38,5 +38,12 @@
   "devDependencies": {
     "esbuild": "^0.19.7",
     "typescript": "^5.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feelinglovelynow/jwt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/feelinglovelynow/jwt/issues"
   }
 }
