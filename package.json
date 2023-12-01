@@ -1,6 +1,6 @@
 {
   "name": "@feelinglovelynow/jwt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Node and/or Edge helper functions to create JWK's, create JWT's, decode JWT's and verify JWT's with the subtle crypto api's ECDSA: SHA-512 algorithm",
   "license": "MIT",
   "type": "module",
@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "bash ./build.sh",
-    "cloud": "pnpm publish --access public ."
+    "cloud": "pnpm build && pnpm publish --access public ."
   },
   "devDependencies": {
     "esbuild": "^0.19.7",

@@ -21,6 +21,6 @@
     "outDir": "tsc", // Types should go into this directory. Removing this would place the .d.ts files next to the .js files
     "declarationMap": true, // go to js file when using IDE functions like "Go to Definition" in VSCode
     "module": "ESNext", // Sets the module system for the program.
-    "target": "ES2015",  // The target setting changes which JS features are downleveled and which are left intact.
+    "target": "ES6",  // The target setting changes which JS features are downleveled and which are left intact.
   }
 }
