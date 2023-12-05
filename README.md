@@ -4,21 +4,25 @@
 ## 💎 Install
 ```bash
 pnpm add @feelinglovelynow/jwt
-pnpm add buffer # only necessary if edge (browser) (cloudflare workers)
+pnpm add buffer # only necessary if @ browser or edge (cloudflare workers)
 ```
+
+
+## 🤓 Unit Tests
+![Statements](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)
 
 
 ## 🙏 Description
 * Node and/or Edge helper functions to create JWK's, create JWT's, decode JWT's and verify JWT's with the subtle crypto api's [ECDSA: SHA-512](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#syntax) algorithm
-* First we create JWK's which give us a private and public JWK (I love to put them in my `.env` file)
-* Then with the private JWK we may `create` JWT's
-* With the public JWK we may `verify` JWT's
+* First we create JWK's which give us a `private` and `public` JWK (I love to put them in my `.env` file)
+* Then with the `private` JWK we may `create` JWT's
+* With the `public` JWK we may `verify` JWT's
 * And with no JWK required we may `decode` JWT's
 
 
-## 💚 Example: Create public and private JWK's
+## 💚 Create public and private JWK's
 * This function will log the public & private JWK's in the terminal
-* Calling this function is only necessary when we first create the JWK's. Once we store the pulic and private JWK's and have no need for more JWK's this code may be removed. So place this code locally somewhere server side, call it for the number of JWK's you'd love and then remove it when they're in your `.env` file
+* Calling this function is only necessary when we first create the JWK's. Once we store the pulic and private JWK's this code may be removed. So place this code locally somewhere server side, call it for the number of JWK's you'd love and then remove it when they're in your `.env` file. The same private JWK can create many JWT's.
 ```ts
 import { createJWKs } from '@feelinglovelynow/jwt'
 
@@ -26,7 +30,8 @@ createJWKs()
 ```
 
 
-## 💛 Example: Create JWT
+## 💛 Create JWT
+* `createJWT(jwtPayload: Object, expiresInAsSeconds: number, privateJWK: string, Buffer: any): Promise<string>`
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
@@ -39,7 +44,8 @@ const jwt = await createJWT(jwtPayload, expiresInAsSeconds, JWK_PRIVATE, Buffer)
 ```
 
 
-## 🧡 Example: Decode JWT
+## 🧡 Decode JWT
+* `decodeJWT(jwt: string, Buffer: any): any`
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
@@ -47,9 +53,16 @@ import { decodeJWT } from '@feelinglovelynow/jwt'
 
 const decoded = decodeJWT(jwt, Buffer)
 ```
+* 🔥 Errors we may throw
+```ts
+if (!jwt || typeof jwt !== 'string' || jwt.split('.').length !== 3) {
+  throw { id: 'fln__decode__invalid-jwt', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } }
+}
+```
 
 
-## ❤️ Example: Verify JWT
+## ❤️ Verify JWT
+* `verifyJWT(jwt: string, publicJWK: string, Buffer: any): Promise<any>`
 ```ts
 import { Buffer } from 'buffer/' // edge
 import { Buffer } from 'node:buffer' // node
@@ -58,14 +71,17 @@ import { JWK_PUBLIC } from '$env/static/private'
 
 const payload = await verifyJWT(jwt, JWK_PUBLIC, Buffer)
 ```
-
-
-## 🌟 Errors we may throw
+* 🔥 Errors we may throw
 ```ts
-throw { id: 'fln__decode__invalid-part-length', message: 'Please provide a token with 3 parts', _errorData: { jwt } }
-throw { id: 'fln__verify__invalid-part-length', message: 'Please provide a token with 3 parts', _errorData: { jwt } }
-throw { id: 'fln__verify__expired', message: 'Token has expired', _errorData: { jwt } }
-throw { id: 'fln__verify__invalid', message: 'Token is invalid', _errorData: { jwt } }
+if (!jwt || typeof jwt !== 'string' || jwt.split('.').length !== 3) {
+  throw { id: 'fln__verify__bad-format', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } }
+}
+
+if (expiresInAsSeconds <= now()) {
+  throw { id: 'fln__verify__expired', message: 'Token has expired', _errorData: { jwt } }
+}
+
+if (!isValid) throw { id: 'fln__verify__invalid', message: 'Token is invalid', _errorData: { jwt } }
 ```
 
 

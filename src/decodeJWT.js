@@ -5,8 +5,23 @@
  * @returns { any }
 */
 export function decodeJWT (jwt, Buffer) {
-  const jwtParts = jwt.split('.')
+  return JSON.parse(Buffer.from(getPayload(jwt), 'base64').toString())
+}
 
-  if (jwtParts.length !== 3) throw { id: 'fln__decode__invalid-part-length', message: 'Please provide a token with 3 parts', _errorData: { jwt } }
-  else return JSON.parse(Buffer.from(jwtParts[1], 'base64').toString())
+
+/**
+ * Get payload section of JWT token
+ * @param { string } jwt 
+ * @returns { string }
+ */
+function getPayload (jwt) {
+  const error = { id: 'fln__decode__invalid-jwt', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } }
+
+  if (!jwt || typeof jwt !== 'string') throw error
+
+  const parts = jwt.split('.')
+
+  if (parts.length !== 3) throw error
+
+  return parts[1]
 }
