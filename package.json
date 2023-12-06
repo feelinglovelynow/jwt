@@ -1,6 +1,6 @@
 {
   "name": "@feelinglovelynow/jwt",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Node and/or Edge helper functions to create JWK's, create JWT's, decode JWT's and verify JWT's with the subtle crypto api's ECDSA: SHA-512 algorithm",
   "license": "MIT",
   "type": "module",
@@ -37,6 +37,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules pnpm jest"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "buffer": "^6.0.3",
     "esbuild": "^0.19.7",
     "jest": "^29.7.0",

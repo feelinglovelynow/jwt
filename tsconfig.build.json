@@ -1,31 +1,26 @@
 {
   "files": [
     "./src/createJWKs.js",
-    "./src/createJWKs.test.js",
     "./src/createJWT.js",
-    "./src/createJWT.test.js",
     "./src/decodeJWT.js",
-    "./src/decodeJWT.test.js",
     "./src/getAlgorithmOptions.js",
-    "./src/getAlgorithmOptions.test.js",
     "./src/getHeaderAndPayloadAsStrings.js",
-    "./src/getHeaderAndPayloadAsStrings.test.js",
     "./src/getNowInSeconds.js",
-    "./src/getNowInSeconds.test.js",
     "./src/index.js",
     "./src/toBase64Url.js",
-    "./src/toBase64Url.test.js",
-    "./src/verifyJWT.js",
-    "./src/verifyJWT.test.js"
+    "./src/verifyJWT.js"
   ],
   "compilerOptions": {
-    "noEmit": true,
     "allowJs": true,
     "checkJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "sourceMap": true,
+    "declaration": true,
     "strict": true,
+    "outDir": "tsc",
+    "declarationMap": true,
     "module": "NodeNext",
     "target": "ES2017"
   }

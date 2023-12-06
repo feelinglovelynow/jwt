@@ -1,32 +1,24 @@
 import { createJWKs } from './createJWKs.js'
-import { describe, test, expect, jest } from '@jest/globals'
 import { getAlgorithmOptions } from './getAlgorithmOptions.js'
+import { describe, test, expect, jest, beforeEach, afterEach } from '@jest/globals'
 
 
-const publicKey = '123'
-const privateKey = 'abc'
-const publicJWK = { key_ops: ['verify'] }
-const privateJWK = { key_ops: ['sign'] }
+/** @type { jest.SpiedFunction<typeof crypto.subtle.generateKey> } */
+let spyGenerateKey
 
+/** @type { jest.SpiedFunction<typeof crypto.subtle.exportKey> } */
+let spyExportKey
 
-function setCryptoMock() {
-  crypto.subtle.generateKey = jest.fn(() => {
-    return Promise.resolve({ privateKey, publicKey })
-  })
-
-  crypto.subtle.exportKey = jest.fn((_, key) => {
-    return key === publicKey ? 
-      Promise.resolve(publicJWK) :
-      Promise.resolve(privateJWK)
-  })
-
-  console.log = jest.fn()
-}
+/** @type { jest.SpiedFunction<typeof JSON.stringify> } */
+let spyJsonStringify
 
 
 describe('createJWKs()', () => {
   beforeEach(async () => {
-    setCryptoMock()
+    spyGenerateKey = jest.spyOn(crypto.subtle, 'generateKey')
+    spyExportKey = jest.spyOn(crypto.subtle, 'exportKey')
+    spyJsonStringify = jest.spyOn(JSON, 'stringify')
+    jest.spyOn(console, 'log')
     await createJWKs()
   })
 
@@ -37,15 +29,31 @@ describe('createJWKs()', () => {
 
 
   test('calls crypto.subtle.generateKey()', () => {
-    
-    expect(crypto.subtle.generateKey).toHaveBeenCalled()
+    expect(crypto.subtle.generateKey).toHaveBeenCalledTimes(1)
     expect(crypto.subtle.generateKey).toHaveBeenCalledWith(getAlgorithmOptions('generate'), true, ['sign', 'verify'])
   })
 
 
-  test('calls crypto.subtle.exportKey() and console.log()', () => {
+  test('calls crypto.subtle.exportKey()', async () => {
+    /** @type { CryptoKeyPair } */ // @ts-ignore
+    const { privateKey, publicKey } = await spyGenerateKey.mock.results[0].value
+
+    expect(crypto.subtle.exportKey).toHaveBeenCalledTimes(2)
+    expect(crypto.subtle.exportKey).toHaveBeenCalledWith('jwk', privateKey)
+    expect(crypto.subtle.exportKey).toHaveBeenCalledWith('jwk', publicKey)
+  })
+
+
+  test('calls JSON.stringify()', async () => {
+    expect(JSON.stringify).toHaveBeenCalledTimes(2)
+    expect(JSON.stringify).toHaveBeenCalledWith(await spyExportKey.mock.results[0].value)
+    expect(JSON.stringify).toHaveBeenCalledWith(await spyExportKey.mock.results[1].value)
+  })
+
+
+  test('calls console.log()', async () => {
     expect(console.log).toHaveBeenCalledTimes(2)
-    expect(console.log).toHaveBeenCalledWith('privateJWK', JSON.stringify(privateJWK))
-    expect(console.log).toHaveBeenCalledWith('publicJWK', JSON.stringify(publicJWK))
+    expect(console.log).toHaveBeenCalledWith('privateJWK', spyJsonStringify.mock.results[0].value)
+    expect(console.log).toHaveBeenCalledWith('publicJWK', spyJsonStringify.mock.results[1].value)
   })
 })

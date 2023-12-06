@@ -11,11 +11,13 @@ describe('decodeJWT()', () => {
     for (const jwt of jwtOptions) {
       let error
 
+      // @ts-ignore
       try { decodeJWT(jwt, Buffer) }
       catch (e) { error = e }
 
       expect(error).toEqual({ id: 'fln__decode__invalid-jwt', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } })
 
+      // @ts-ignore
       try { decodeJWT(jwt, BufferEdge) }
       catch (e) { error = e }
 

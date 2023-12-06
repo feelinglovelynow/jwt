@@ -2,32 +2,35 @@ import { Buffer } from 'node:buffer'
 import { createJWT } from './createJWT.js'
 import { Buffer as BufferEdge } from 'buffer/'
 import { toBase64Url } from './toBase64Url.js'
-import { getNowInSeconds } from './getNowInSeconds.js'
-import { describe, test, expect, jest } from '@jest/globals'
 import { getAlgorithmOptions } from './getAlgorithmOptions.js'
 import { getHeaderAndPayloadAsStrings } from './getHeaderAndPayloadAsStrings.js'
+import { describe, test, expect, jest, beforeEach, afterEach } from '@jest/globals'
 
 
-let jwt, jwtEdge, importSpy, signSpy, privateKey, signatureAsArrayBuffer
+/** @type { string } */
+let jwt
 
+/** @type { string } */
+let jwtEdge
+
+/** @type { jest.SpiedFunction<typeof crypto.subtle.sign> } */
+let spySign
+
+/** @type { jest.SpiedFunction<typeof crypto.subtle.importKey> } */
+let spyImportKey
 
 const expiresInAsSeconds = 540
 const jwtPayload = { userUid: 'userUid9', signInId: 'signInId9' }
-const header = JSON.stringify({ alg: 'ES512', typ: 'JWT', exp: expiresInAsSeconds + getNowInSeconds() })
-const payload = JSON.stringify(jwtPayload)
-const united = `${ header }.${ payload }`
-const unitedAsArrayBuffer = new TextEncoder().encode(united)
 const privateJWK = JSON.stringify({ "key_ops": ["sign"], "ext": true, "kty": "EC", "x": "ASD9FAf6K79rBE4WtN1QPwxIQ0BJToa64nolcyuq7EnbQdivt7HjHYIktMeWjCNy4v2AdzxKMM7sDLIzDN8ljilc", "y": "AKf50KZlHgptseBbzaP5rZnLmSkSS-DQSE1UUgN_YGo9eUP1sWNjBMAyXCpsk3rvEgZtYq3_7gH-TmH7LLcZTf0V", "crv": "P-521", "d": "ATQGp5GjYX3x5_xKRg91F6NKz1DuW1q9w1L4JYbcqT62za_v910LsyrUKd_cZX8Mwldj3IcmNzS8Horzu7ijXYzx" })
+
 
 
 describe('createJWT()', () => {
   beforeEach(async () => {
-    signSpy = jest.spyOn(crypto.subtle, 'sign')
-    importSpy = jest.spyOn(crypto.subtle, 'importKey')
-    jest.fn(getHeaderAndPayloadAsStrings, () => ({ header, payload, united }))
+    spySign = jest.spyOn(crypto.subtle, 'sign')
+    spyImportKey = jest.spyOn(crypto.subtle, 'importKey')
     jwt = await createJWT(jwtPayload, expiresInAsSeconds, privateJWK, Buffer)
-    privateKey = await importSpy.mock.results[0].value
-    signatureAsArrayBuffer = await signSpy.mock.results[0].value
+    jwtEdge = await createJWT(jwtPayload, expiresInAsSeconds, privateJWK, BufferEdge)
   })
 
 
@@ -37,27 +40,40 @@ describe('createJWT()', () => {
 
 
   test('calls crypto.subtle.importKey()', () => {
-    expect(importSpy).toHaveBeenCalled()
-    expect(importSpy).toHaveBeenCalledWith('jwk', JSON.parse(privateJWK), getAlgorithmOptions('import'), true, ['sign'])
+    expect(spyImportKey).toHaveBeenCalled()
+    expect(spyImportKey).toHaveBeenCalledWith('jwk', JSON.parse(privateJWK), getAlgorithmOptions('import'), true, ['sign'])
   })
 
 
-  test('calls crypto.subtle.sign()', () => {
-    expect(signSpy).toHaveBeenCalled()
-    expect(signSpy).toHaveBeenCalledWith(getAlgorithmOptions('sign'), privateKey, unitedAsArrayBuffer)
+  test('calls crypto.subtle.sign()', async () => {
+    const privateKey = await spyImportKey.mock.results[0].value
+    const { united } = getHeaderAndPayloadAsStrings(jwtPayload, expiresInAsSeconds)
+    const unitedAsArrayBuffer = new TextEncoder().encode(united)
+
+    expect(spySign).toHaveBeenCalled()
+    expect(spySign).toHaveBeenCalledWith(getAlgorithmOptions('sign'), privateKey, unitedAsArrayBuffer)
   })
 
 
-  test('returns', () => {
-    const signatureAsBase64 = toBase64Url(new Uint8Array(signatureAsArrayBuffer), Buffer)
-    const signatureAsBase64Edge = toBase64Url(new Uint8Array(signatureAsArrayBuffer), BufferEdge)
+  test('returns', async () => {
+    /** @type { CryptoKey } */ // @ts-ignore
+    const { header, payload } = getHeaderAndPayloadAsStrings(jwtPayload, expiresInAsSeconds)
+
+    /** @type { ArrayBuffer } */ // @ts-ignore
+    const signatureAsArrayBuffer = await spySign.mock.results[0].value
+
+    /** @type { ArrayBuffer } */ // @ts-ignore
+    const signatureAsArrayBufferEdge = await spySign.mock.results[1].value
+
     const headerAsBase64 = toBase64Url(header, Buffer)
-    const headerAsBase64Edge = toBase64Url(header, BufferEdge)
     const payloadAsBase64 = toBase64Url(payload, Buffer)
+    const signatureAsBase64 = toBase64Url(new Uint8Array(signatureAsArrayBuffer), Buffer)
+
+    const headerAsBase64Edge = toBase64Url(header, BufferEdge)
     const payloadAsBase64Edge = toBase64Url(payload, BufferEdge)
+    const signatureAsBase64Edge = toBase64Url(new Uint8Array(signatureAsArrayBufferEdge), BufferEdge)
+
     expect(jwt).toEqual(`${ headerAsBase64 }.${ payloadAsBase64 }.${ signatureAsBase64 }`)
-    expect(jwt).toEqual(`${ headerAsBase64Edge }.${ payloadAsBase64 }.${ signatureAsBase64 }`)
-    expect(jwt).toEqual(`${ headerAsBase64Edge }.${ payloadAsBase64Edge }.${ signatureAsBase64 }`)
-    expect(jwt).toEqual(`${ headerAsBase64Edge }.${ payloadAsBase64Edge }.${ signatureAsBase64Edge }`)
+    expect(jwtEdge).toEqual(`${ headerAsBase64Edge }.${ payloadAsBase64Edge }.${ signatureAsBase64Edge }`)
   })
 })
