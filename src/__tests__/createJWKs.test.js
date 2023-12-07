@@ -1,5 +1,5 @@
-import { createJWKs } from './createJWKs.js'
-import { getAlgorithmOptions } from './getAlgorithmOptions.js'
+import { createJWKs } from '../createJWKs.js'
+import { getAlgorithmOptions } from '../getAlgorithmOptions.js'
 import { describe, test, expect, jest, beforeEach, afterEach } from '@jest/globals'
 
 

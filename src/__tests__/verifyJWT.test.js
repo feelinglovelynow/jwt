@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
-import { verifyJWT } from './verifyJWT.js'
-import { createJWT } from './createJWT.js'
+import { verifyJWT } from '../verifyJWT.js'
+import { createJWT } from '../createJWT.js'
 import { Buffer as BufferEdge } from 'buffer/'
 import { describe, test, expect } from '@jest/globals'
 

@@ -5,7 +5,10 @@ import { getAlgorithmOptions } from './getAlgorithmOptions.js'
  * Throws errors if JWT is invalid and returns the JWT's decoded payload if it's valid
  * @param { string } jwt 
  * @param { string } publicJWK 
- * @param {  any } Buffer 
+ * @param { any } Buffer
+ * @throws { { id: 'fln__verify__bad-format', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } } } - `IF (!jwt || typeof jwt !== 'string' || jwt.split('.').length !== 3)`
+ * @throws { { id: 'fln__verify__expired', message: 'Token has expired', _errorData: { jwt } } } - `IF (expiresInAsSeconds <= now())`
+ * @throws { { id: 'fln__verify__invalid', message: 'Token is invalid', _errorData: { jwt } } } - `IF (!isValid)`
  * @returns { Promise<any> }
 */
 export async function verifyJWT (jwt, publicJWK, Buffer) {

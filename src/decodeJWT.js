@@ -1,7 +1,8 @@
 /**
  * Decode JWT token
  * @param { string } jwt 
- * @param { any } Buffer 
+ * @param { any } Buffer
+ * @throws { { id: 'fln__decode__invalid-jwt', message: 'Please provide a string token, with 3 parts, seperated by a dot', _errorData: { jwt } } } - `IF (!jwt || typeof jwt !== 'string' || jwt.split('.').length !== 3)`
  * @returns { any }
 */
 export function decodeJWT (jwt, Buffer) {

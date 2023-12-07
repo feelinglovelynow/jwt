@@ -1,14 +1,14 @@
 {
   "files": [
-    "./src/createJWKs.js",
-    "./src/createJWT.js",
-    "./src/decodeJWT.js",
-    "./src/getAlgorithmOptions.js",
-    "./src/getHeaderAndPayloadAsStrings.js",
-    "./src/getNowInSeconds.js",
-    "./src/index.js",
-    "./src/toBase64Url.js",
-    "./src/verifyJWT.js"
+    "src/createJWKs.js",
+    "src/createJWT.js",
+    "src/decodeJWT.js",
+    "src/getAlgorithmOptions.js",
+    "src/getHeaderAndPayloadAsStrings.js",
+    "src/getNowInSeconds.js",
+    "src/index.js",
+    "src/toBase64Url.js",
+    "src/verifyJWT.js"
   ],
   "compilerOptions": {
     "allowJs": true,

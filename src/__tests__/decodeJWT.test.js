@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer'
-import { decodeJWT } from './decodeJWT.js'
+import { decodeJWT } from '../decodeJWT.js'
 import { Buffer as BufferEdge } from 'buffer/'
 import { describe, test, expect } from '@jest/globals'
 

@@ -1,9 +1,9 @@
 import { Buffer } from 'node:buffer'
-import { createJWT } from './createJWT.js'
+import { createJWT } from '../createJWT.js'
 import { Buffer as BufferEdge } from 'buffer/'
-import { toBase64Url } from './toBase64Url.js'
-import { getAlgorithmOptions } from './getAlgorithmOptions.js'
-import { getHeaderAndPayloadAsStrings } from './getHeaderAndPayloadAsStrings.js'
+import { toBase64Url } from '../toBase64Url.js'
+import { getAlgorithmOptions } from '../getAlgorithmOptions.js'
+import { getHeaderAndPayloadAsStrings } from '../getHeaderAndPayloadAsStrings.js'
 import { describe, test, expect, jest, beforeEach, afterEach } from '@jest/globals'
 
 

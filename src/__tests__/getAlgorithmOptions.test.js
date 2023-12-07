@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals'
-import { getAlgorithmOptions } from './getAlgorithmOptions.js'
+import { getAlgorithmOptions } from '../getAlgorithmOptions.js'
 
 
 describe('decodeJWT()', () => {

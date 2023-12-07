@@ -1,4 +1,4 @@
-import { getNowInSeconds } from './getNowInSeconds.js'
+import { getNowInSeconds } from '../getNowInSeconds.js'
 import { describe, test, expect } from '@jest/globals'
 
 

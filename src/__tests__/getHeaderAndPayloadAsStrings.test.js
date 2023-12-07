@@ -1,6 +1,6 @@
 import { describe, test, expect } from '@jest/globals'
-import { getNowInSeconds } from './getNowInSeconds.js'
-import { getHeaderAndPayloadAsStrings } from './getHeaderAndPayloadAsStrings.js'
+import { getNowInSeconds } from '../getNowInSeconds.js'
+import { getHeaderAndPayloadAsStrings } from '../getHeaderAndPayloadAsStrings.js'
 
 
 const expiresInAsSeconds = 540
